@@ -1,0 +1,224 @@
+{\rtf1\ansi\ansicpg936\cocoartf1265\cocoasubrtf190
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset134 STHeitiSC-Light;\f2\fnil\fcharset0 Menlo-Regular;
+}
+{\colortbl;\red255\green255\blue255;\red100\green56\blue32;\red196\green26\blue22;\red92\green38\blue153;
+\red46\green13\blue110;\red28\green0\blue207;\red63\green110\blue116;\red170\green13\blue145;\red0\green116\blue0;
+\red38\green71\blue75;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww19820\viewh9800\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs48 \cf0 iBeacon 
+\f1 \'b5\'c6\'cb\'fe\'cf\'b5\'cd\'b3\
+\'b7\'fe\'ce\'f1\'b6\'cb\
+1\'a1\'a2\'bc\'d3\'c8\'eb\'cd\'b7\'ce\'c4\'bc\'fe\
+\pard\tx1155\pardeftab1155\pardirnatural
+
+\f2 \cf2 \CocoaLigature0 #import \cf3 <CoreLocation/CoreLocation.h>\cf2 \
+#import \cf3 <CoreBluetooth/CoreBluetooth.h>\
+2
+\f1 \'a1\'a2\'bc\'d3\'c8\'eb\'d0\'ad\'d2\'e9
+\f2 \
+\pard\tx1155\pardeftab1155\pardirnatural
+\cf4 CLLocationManagerDelegate
+\f1 \'a3\'ac
+\f2 CBPeripheralManagerDelegate\
+3
+\f1 \'a1\'a2\'b3\'f5\'ca\'bc\'bb\'af
+\f2 \
+\pard\tx1155\pardeftab1155\pardirnatural
+\cf0   \cf4 NSUUID\cf0 *uuid=[[\cf4 NSUUID\cf0  \cf5 alloc\cf0 ]\cf5 initWithUUIDString\cf0 :\cf2 KUUID\cf0 ];\
+        \cf4 CLBeaconMajorValue\cf0  major= \cf6 45\cf0 ;\
+        \cf4 CLBeaconMinorValue\cf0  minor= \cf5 arc4random\cf0 ()%\cf6 1000\cf0 ;\
+        \cf7 myBeaconRegion\cf0 =[[\cf4 CLBeaconRegion\cf0  \cf5 alloc\cf0 ]\cf5 initWithProximityUUID\cf0 :uuid \cf5 major\cf0 :major \cf5 minor\cf0 :minor \cf5 identifier\cf0 :[[\cf4 NSBundle\cf0  \cf5 mainBundle\cf0 ] \cf5 bundleIdentifier\cf0 ]];\
+        \cf7 myBeaconData\cf0 =[\cf7 myBeaconRegion\cf0  \cf5 peripheralDataWithMeasuredPower\cf0 :\cf8 nil\cf0 ];\
+        [\cf7 myBeaconData\cf0  \cf5 retain\cf0 ];\
+
+\f1 //\'c6\'f4\'b6\'af\'ba\'f3\'d6\'b1\'bd\'d3\'b5\'f7\'d3\'c3\'b4\'fa\'c0\'ed
+\f2 \
+        \cf7 peripheralMsg\cf0 =[[\cf4 CBPeripheralManager\cf0  \cf5 alloc\cf0 ]\cf5 initWithDelegate\cf0 :\cf8 self\cf0  \cf5 queue\cf0 :\cf2 dispatch_get_main_queue\cf0 () \cf5 options\cf0 :\cf8 nil\cf0 ];\
+\pard\tx1155\pardeftab1155\pardirnatural
+\cf9 //
+\f1 \'d7\'b4\'cc\'ac\'b1\'e4\'bb\'af
+\f2 \cf0 \
+-(\cf8 void\cf0 )peripheralManagerDidUpdateState:(\cf4 CBPeripheralManager\cf0  *)peripheral\
+\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'b7\'fe\'ce\'f1\'b6\'cb\'d7\'b4\'cc\'ac\'d3\'d0\'b1\'e4\'bb\'af
+\f2 "\cf0 );\
+    \cf8 if\cf0  (peripheral.\cf4 state\cf0 ==\cf5 CBPeripheralManagerStatePoweredOn\cf0 ) \{\
+        \
+        [\cf7 peripheralMsg\cf0  \cf5 startAdvertising\cf0 :\cf7 myBeaconData\cf0 ];\
+    \}\cf8 else\cf0 \{\
+        \
+        \cf8 if\cf0  (peripheral.\cf4 state\cf0 ==\cf5 CBPeripheralManagerStatePoweredOff\cf0 ) \{\
+            [peripheral \cf5 stopAdvertising\cf0 ];\
+        \}\
+    \}\
+\}\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f1 \cf0 \CocoaLigature1 \
+\'bf\'cd\'bb\'a7\'b6\'cb\
+1\'a1\'a2\'bc\'d3\'c8\'eb\'cd\'b7\'ce\'c4\'bc\'fe\
+\pard\tx1155\pardeftab1155\pardirnatural
+
+\f2 \cf2 \CocoaLigature0 #import \cf3 <CoreBluetooth/CoreBluetooth.h>\cf2 \
+#import \cf3 <CoreLocation/CoreLocation.h>\
+2
+\f1 \'a1\'a2\'cc\'ed\'bc\'d3\'d0\'ad\'d2\'e9\
+\pard\tx1155\pardeftab1155\pardirnatural
+
+\f2 \cf4 CLLocationManagerDelegate\cf3 \
+3
+\f1 \'a1\'a2\'b3\'f5\'ca\'bc\'bb\'af
+\f2 \
+\pard\tx1155\pardeftab1155\pardirnatural
+\cf0  \cf8 self\cf0 .\cf7 dataArray\cf0 =[\cf4 NSMutableDictionary\cf0  \cf5 dictionaryWithCapacity\cf0 :\cf6 0\cf0 ];\
+        \cf7 locationManager\cf0 =[[\cf4 CLLocationManager\cf0  \cf5 alloc\cf0 ]\cf5 init\cf0 ];\
+        \cf7 locationManager\cf0 .\cf4 delegate\cf0 =\cf8 self\cf0 ;\
+        \cf9 //@"E2C56DB5-DFFB-48D2-B060-D0F5A71096E4"\cf0 \
+        \cf4 NSUUID\cf0 *uuid=[[\cf4 NSUUID\cf0  \cf5 alloc\cf0 ]\cf5 initWithUUIDString\cf0 :\cf2 KUUID\cf0 ];\
+        \cf7 myBeaconRegion\cf0 =[[\cf4 CLBeaconRegion\cf0  \cf5 alloc\cf0 ]\cf5 initWithProximityUUID\cf0 :uuid \cf5 identifier\cf0 :[[\cf4 NSBundle\cf0  \cf5 mainBundle\cf0 ] \cf5 bundleIdentifier\cf0 ]];\
+        [\cf7 locationManager\cf0  \cf5 startMonitoringForRegion\cf0 :\cf7 myBeaconRegion\cf0 ];\
+        [\cf7 locationManager\cf0  \cf5 requestStateForRegion\cf0 :\cf7 myBeaconRegion\cf0 ];\
+        [\cf7 locationManager\cf0  \cf5 startRangingBeaconsInRegion\cf0 :\cf7 myBeaconRegion\cf0 ];\
+\
+
+\f1 //\'d6\'d8\'d2\'aa\
+\pard\tx1155\pardeftab1155\pardirnatural
+
+\f2 \cf9 //
+\f1 \'bd\'f8\'c8\'eb\'b5\'bd\'c4\'b3\'d2\'bb\'b8\'f6
+\f2 iBeacon
+\f1 \'b7\'b6\'ce\'a7\'c4\'da\'a3\'ac\'d4\'da\'ba\'f3\'cc\'a8\'cd\'ac\'d1\'f9\'bf\'c9\'d2\'d4\'ca\'d5\'b5\'bd\'a3\'ac\'c8\'bb\'ba\'f3\'b7\'a2\'c6\'f0\'cd\'f8\'c2\'e7\'c7\'eb\'c7\'f3
+\f2 \cf0 \
+-(\cf8 void\cf0 )locationManager:(\cf4 CLLocationManager\cf0  *)manager didEnterRegion:(\cf4 CLRegion\cf0  *)region\
+\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'bd\'f8\'c8\'eb\'c7\'f8\'d3\'f2
+\f2 "\cf0 );\
+    \
+    \
+\}\
+\cf9 //
+\f1 \'c0\'eb\'bf\'aa\'c4\'b3\'d2\'bb\'b8\'f6
+\f2 iBeacon
+\f1 \'b7\'b6\'ce\'a7\'c4\'da
+\f2 \cf0 \
+-(\cf8 void\cf0 )locationManager:(\cf4 CLLocationManager\cf0  *)manager didExitRegion:(\cf4 CLRegion\cf0  *)region\
+\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'c0\'eb\'bf\'aa\'c7\'f8\'d3\'f2
+\f2 "\cf0 );\
+\}\
+\
+\cf9 //
+\f1 \'c6\'c1\'c4\'bb\'b5\'e3\'c1\'c1\'ca\'b1\'ba\'f2
+\f2  
+\f1 \'c8\'e7\'b9\'fb\'c9\'e8\'b1\'b8\'d4\'da\'d2\'bb\'b8\'f6
+\f2 beacon
+\f1 \'c4\'da\'bb\'e1\'b5\'f7\'d3\'c3\'a3\'ac\'b2\'bb\'c2\'db\'d3\'c3\'bb\'a7\'ca\'c7\'b7\'f1\'d4\'da\'c7\'b0\'cc\'a8\'bb\'f2\'d5\'df\'ba\'f3\'cc\'a8\'bb\'f2\'d5\'df
+\f2 kill\cf0 \
+-(\cf8 void\cf0 )locationManager:(\cf4 CLLocationManager\cf0  *)manager didDetermineState:(\cf4 CLRegionState\cf0 )state forRegion:(\cf4 CLRegion\cf0  *)region\
+\{\
+    \cf8 if\cf0  (state==\cf5 CLRegionStateInside\cf0 ) \{\
+        \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'d4\'da\'c0\'ef\'c3\'e6
+\f2 "\cf0 );\
+    \}\
+    \cf8 if\cf0  (state==\cf5 CLRegionStateOutside\cf0 ) \{\
+        \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'cd\'e2\'c3\'e6
+\f2 "\cf0 );\
+    \}\
+\
+\}\
+\cf9 //
+\f1 \'bb\'f1\'b5\'c3\'c3\'bf\'b4\'ce\'b6\'a8\'ce\'bb\'b5\'c4\'be\'e0\'c0\'eb\'d2\'d4\'bc\'b0\'cf\'e0\'b9\'d8
+\f2 CLBeacon
+\f1 \'b5\'c4\'ca\'fd\'be\'dd
+\f2 \cf0 \
+-(\cf8 void\cf0 )locationManager:(\cf4 CLLocationManager\cf0  *)manager didRangeBeacons:(\cf4 NSArray\cf0  *)beacons inRegion:(\cf4 CLBeaconRegion\cf0  *)region\
+\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'c9\'a8\'c3\'e8\'d6\'d0\'a1\'a3\'a1\'a3\'a1\'a3\'a1\'a3\'a1\'a3
+\f2 "\cf0 );\
+    \cf8 int\cf0  num=[\cf8 self\cf0 .\cf7 dataArray\cf0  \cf5 allKeys\cf0 ].\cf5 count\cf0 ;\
+    \
+    \cf8 for\cf0  (\cf4 CLBeacon\cf0  *beacon \cf8 in\cf0  beacons) \{\
+        \cf4 NSString\cf0 *str=[\cf8 self\cf0  \cf10 modelToString\cf0 :beacon];\
+        [\cf8 self\cf0 .\cf7 dataArray\cf0  \cf5 setObject\cf0 :str \cf5 forKey\cf0 :[beacon.\cf4 minor\cf0  \cf5 stringValue\cf0 ]];\
+        \
+      \cf4 UITextView\cf0 *textView=  (\cf4 UITextView\cf0 *)[\cf8 self\cf0 .\cf7 vc\cf0 .\cf4 view\cf0  \cf5 viewWithTag\cf0 :[beacon.\cf4 minor\cf0  \cf5 integerValue\cf0 ]];\
+        \cf8 if\cf0  (textView) \{\
+            textView.\cf4 text\cf0 =str;\
+        \}\cf8 else\cf0 \{\
+           textView= [\cf8 self\cf0 .\cf7 vc\cf0  \cf10 createTextViewFrame\cf0 :\cf5 CGRectMake\cf0 (num%\cf6 3\cf0 *\cf6 100\cf0 , num/\cf6 3\cf0 *\cf6 210\cf0 , \cf6 90\cf0 , \cf6 200\cf0 ) \cf10 text\cf0 :str];\
+            textView.\cf4 tag\cf0 =[beacon.\cf4 minor\cf0  \cf5 integerValue\cf0 ];\
+            \
+            \
+            num++;\
+        \}\
+        \
+    \}\
+    \
+    \cf5 NSLog\cf0 (\cf3 @"%@"\cf0 ,\cf8 self\cf0 .\cf7 dataArray\cf0 );\
+  \
+    \
+    \
+\}\
+-(\cf4 NSString\cf0 *)modelToString:(\cf4 CLBeacon\cf0 *)beacon\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'d7\'ee\'bd\'fc\'b6\'e0\'c9\'d9\'c3\'d7
+\f2 %0.4f"\cf0 ,beacon.accuracy);\
+    \cf4 NSString\cf0 *str=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"uuid %@ \\n"\cf0 ,beacon.\cf4 proximityUUID\cf0 .\cf5 UUIDString\cf0 ];\
+    \cf4 NSString\cf0 *str1=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"
+\f1 \'d6\'f7\'c6\'b5
+\f2  %@\\n"\cf0 ,beacon.\cf4 major\cf0 ];\
+    \cf4 NSString\cf0 *str2=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"
+\f1 \'b8\'b1\'c6\'b5
+\f2  %@\\n"\cf0 ,beacon.\cf4 minor\cf0 ];\
+    \cf4 NSString\cf0 *str3=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"
+\f1 \'bd\'d3\'bd\'fc\'b3\'cc\'b6\'c8
+\f2 ~%d\\n"\cf0 ,beacon.\cf4 proximity\cf0 ];\
+    \cf4 NSString\cf0 *str4=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"
+\f1 \'be\'e0\'c0\'eb\'ce\'d2\'b6\'e0\'d4\'b6
+\f2  %0.4f\\n"\cf0 ,beacon.accuracy];\
+    \cf4 NSString\cf0 *str5=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"
+\f1 \'d0\'c5\'ba\'c5\'c7\'bf\'b6\'c8
+\f2 ~%d\\n"\cf0 ,beacon.rssi];\
+    \cf4 NSString\cf0 *strAll=[\cf4 NSString\cf0  \cf5 stringWithFormat\cf0 :\cf3 @"%@%@%@%@%@%@%@"\cf0 ,str,str1,str2,str3,str4,str5];\
+    \cf8 return\cf0  strAll;\
+\}\
+\cf9 //
+\f1 \'c6\'f4\'b6\'af
+\f2 iBeacon
+\f1 \'b7\'fe\'ce\'f1\'b4\'ed\'ce\'f3\'a3\'a8\'cd\'a8\'b3\'a3\'d0\'e8\'d2\'aa\'d6\'d8\'c6\'f4\'ca\'d6\'bb\'fa\'b2\'c5\'bf\'c9\'d2\'d4\'a3\'a9
+\f2 \cf0 \
+-(\cf8 void\cf0 )locationManager:(\cf4 CLLocationManager\cf0  *)manager rangingBeaconsDidFailForRegion:(\cf4 CLBeaconRegion\cf0  *)region withError:(\cf4 NSError\cf0  *)error\
+\{\
+    \cf5 NSLog\cf0 (\cf3 @"
+\f1 \'bf\'aa\'c6\'f4\'ca\'a7\'b0\'dc
+\f2 "\cf0 );\
+\
+\}\
+\pard\tx1155\pardeftab1155\pardirnatural
+\cf3 \
+
+\f1 //\'b1\'be\'b5\'d8\'cd\'a8\'d6\'aa\
+\pard\tx1155\pardeftab1155\pardirnatural
+
+\f2 \cf0     \cf4 UILocalNotification\cf0  *notice = [[\cf4 UILocalNotification\cf0  \cf5 alloc\cf0 ] \cf5 init\cf0 ];\
+    notice.\cf4 alertBody\cf0  = \cf3 @"sorry
+\f1 \'a3\'ac\'c4\'e3\'c0\'eb\'bf\'aa\'c1\'cb
+\f2  iSS iBeacon region"\cf0 ;\
+    notice.\cf4 alertAction\cf0  = \cf3 @"Open"\cf0 ;\
+    notice.\cf4 soundName\cf0  = \cf4 UILocalNotificationDefaultSoundName\cf0 ;\
+    [[\cf4 UIApplication\cf0  \cf5 sharedApplication\cf0 ] \cf5 scheduleLocalNotification\cf0 :notice];\
+\
+
+\f1 //\'c5\'d0\'b6\'cf\'ca\'c7\'b7\'f1\'d4\'da\'ba\'f3\'cc\'a8\
+
+\f2   [\cf4 UIApplication\cf0  \cf5 sharedApplication\cf0 ].\cf4 applicationState\cf0  == \cf5 UIApplicationStateBackground\cf3 \
+\
+}
